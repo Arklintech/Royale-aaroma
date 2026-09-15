@@ -109,7 +109,7 @@ function ShopIndexPage() {
                 : "border border-border bg-background/80 text-foreground hover:bg-muted"
             }`}
           >
-            All Collections (8)
+            All Collections ({products.length})
           </button>
           {collections.map((c) => (
             <button

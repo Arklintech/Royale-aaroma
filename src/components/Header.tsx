@@ -30,6 +30,9 @@ export function Header() {
 
   const isHomePage = location.pathname === "/" || location.pathname === "";
 
+  const shopContainerRef = React.useRef<HTMLDivElement>(null);
+  const shopTriggerRef = React.useRef<HTMLButtonElement>(null);
+
   // Scroll listener for homepage transparent -> solid #292C4F transition at scrollY > 60px
   React.useEffect(() => {
     if (!isHomePage) {
@@ -48,6 +51,37 @@ export function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isHomePage]);
+
+  // Click outside and ESC key handlers for SHOP dropdown (Click to open only, no hover)
+  React.useEffect(() => {
+    if (!megaMenuOpen) return;
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        shopContainerRef.current &&
+        !shopContainerRef.current.contains(event.target as Node)
+      ) {
+        setMegaMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMegaMenuOpen(false);
+        shopTriggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [megaMenuOpen]);
 
   const centerNavLinks = [
     { label: "HOME", href: "/" },
@@ -72,7 +106,7 @@ export function Header() {
 
   return (
     <>
-      <header className={headerWrapperClass}>
+      <header className={headerWrapperClass} ref={shopContainerRef}>
         {/* Top announcement bar: Shown on inner pages, hidden on homepage hero */}
         {!isHomePage && (
           <div className="w-full bg-[#1E203A] px-4 py-2 text-center text-[10.5px] font-medium tracking-[0.16em] text-[#FFFDF8]/90 sm:px-6 border-b border-[#FFFDF8]/10">
@@ -129,14 +163,24 @@ export function Header() {
               const active = isLinkActive(link.href);
               if (link.isShop) {
                 return (
-                  <div
-                    key={link.label}
-                    className="relative flex items-center h-full"
-                    onMouseEnter={() => setMegaMenuOpen(true)}
-                  >
-                    <Link
-                      to={link.href}
-                      className={`text-[13px] font-medium uppercase tracking-[0.14em] transition-colors flex items-center gap-1.5 py-2 ${
+                  <div key={link.label} className="relative flex items-center h-full">
+                    <button
+                      ref={shopTriggerRef}
+                      type="button"
+                      id="shop-menu-trigger"
+                      aria-expanded={megaMenuOpen}
+                      aria-controls="shop-mega-menu"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setMegaMenuOpen((prev) => !prev);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setMegaMenuOpen((prev) => !prev);
+                        }
+                      }}
+                      className={`text-[13px] font-medium uppercase tracking-[0.14em] transition-colors flex items-center gap-1.5 py-2 cursor-pointer bg-transparent border-none outline-none ${
                         active || megaMenuOpen
                           ? "text-[#C8754E]"
                           : "text-[#FFFDF8] hover:text-[#C8754E]"
@@ -148,7 +192,7 @@ export function Header() {
                           megaMenuOpen ? "rotate-180 text-[#C8754E]" : "text-current opacity-80"
                         }`}
                       />
-                    </Link>
+                    </button>
                   </div>
                 );
               }
@@ -267,8 +311,8 @@ export function Header() {
                 Shop All Collections
               </Link>
               <div className="pl-4 text-sm space-y-2.5 font-sans text-[#F6F1E8]/75 border-l border-[#C8754E]/40">
-                <span className="block text-[11px] font-bold uppercase tracking-widest text-[#25D366] pt-1">
-                  Attars & Perfume Oils
+                <span className="block text-[11px] font-bold uppercase tracking-widest text-[#C8754E] pt-1">
+                  The Six Collections
                 </span>
                 <Link
                   to="/shop/$collection"
@@ -276,7 +320,7 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block hover:text-[#C8754E]"
                 >
-                  Natural Series (Deg Bhapka)
+                  Natural Series <span className="opacity-70 text-xs italic">(Pure Botanicals)</span>
                 </Link>
                 <Link
                   to="/shop/$collection"
@@ -284,7 +328,7 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block hover:text-[#C8754E]"
                 >
-                  Traditional Series
+                  Traditional Series <span className="opacity-70 text-xs italic">(Timeless Classics)</span>
                 </Link>
                 <Link
                   to="/shop/$collection"
@@ -292,7 +336,7 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block hover:text-[#C8754E]"
                 >
-                  Inspired Series
+                  Inspired Series <span className="opacity-70 text-xs italic">(Modern Interpretations)</span>
                 </Link>
                 <Link
                   to="/shop/$collection"
@@ -300,7 +344,7 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block hover:text-[#C8754E]"
                 >
-                  Musk Series
+                  Musk Series <span className="opacity-70 text-xs italic">(Intimate Essences)</span>
                 </Link>
                 <Link
                   to="/shop/$collection"
@@ -308,7 +352,7 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block hover:text-[#C8754E]"
                 >
-                  Luxury Series (Reserve)
+                  Luxury Series <span className="opacity-70 text-xs italic">(Exceptional Blends)</span>
                 </Link>
                 <Link
                   to="/shop/$collection"
@@ -316,7 +360,7 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block hover:text-[#C8754E]"
                 >
-                  Fruity Attars
+                  Fruity Series <span className="opacity-70 text-xs italic">(Vibrant Expressions)</span>
                 </Link>
                 <Link
                   to="/shop/$collection"

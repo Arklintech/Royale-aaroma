@@ -14,7 +14,7 @@ interface ProductCardProps {
 export function ProductCard({ product, className = "", theme = "light" }: ProductCardProps) {
   const { formatPrice, setQuickViewProduct, getWhatsAppProductUrl } = useCommerce();
 
-  const isDark = theme === "dark" || product.collectionSlug === "luxury-series";
+  const isDark = theme === "dark";
 
   return (
     <article

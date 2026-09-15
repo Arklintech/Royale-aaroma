@@ -1,11 +1,11 @@
 import React from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowRight, ShieldAlert, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldAlert } from "lucide-react";
 import { getCollectionBySlug } from "../../../data/collections";
 import { getProductsByCollection } from "../../../data/products";
 import { FragranceCabinet } from "../../../components/FragranceCabinet";
 
-export const Route = createFileRoute("/shop/$collection/")({
+export const Route = createFileRoute("/collections/$collection/")({
   loader: async ({ params }) => {
     const collection = getCollectionBySlug(params.collection);
     if (!collection) {
@@ -56,7 +56,7 @@ function CollectionPage() {
       <FragranceCabinet
         collection={collection}
         products={products}
-        currentRoutePrefix="/shop"
+        currentRoutePrefix="/collections"
       />
 
       {/* Inspired Series Explicit Legal Disclaimer */}
@@ -65,23 +65,6 @@ function CollectionPage() {
           <div className="rounded-xl bg-[#FAF7F0] border border-[#D8CFBF] p-5 flex items-start gap-3.5 text-xs leading-relaxed text-[#3F3933]">
             <ShieldAlert className="size-4 text-[#C8754E] shrink-0 mt-0.5" />
             <p className="max-w-4xl">{collection.disclaimer}</p>
-          </div>
-        </section>
-      )}
-
-      {/* Bakhoor & Perfume Launch Educational Banner */}
-      {collection.isUpcoming && (
-        <section className="site-container mt-8">
-          <div className="rounded-xl border border-accent/40 bg-accent/10 p-6">
-            <div className="flex items-center gap-2 text-accent font-bold">
-              <Sparkles className="size-4" />
-              <span className="eyebrow">Upcoming Launch Reservation</span>
-            </div>
-            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-foreground/90">
-              The {collection.name} collection is undergoing its final maturation cycle in our
-              Kannauj blending sanctuary. You may preview the formulations above and register your
-              priority reservation via our private WhatsApp concierge.
-            </p>
           </div>
         </section>
       )}

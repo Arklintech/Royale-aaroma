@@ -1,14 +1,14 @@
 import botanicalImage from "../assets/botanical-notes.jpg";
 import workshopImage from "../assets/craft-workshop.jpg";
 import heroImage from "../assets/royale-hero.jpg";
-import { CollectionMeta } from "./types";
+import { CollectionMeta, CollectionSlug } from "./types";
 
 export const collections: CollectionMeta[] = [
   {
     slug: "natural-series",
     name: "Natural Series",
-    seriesNumber: "Series 01",
-    subtitle: "Traditional Distilled Attars",
+    seriesNumber: "01",
+    subtitle: "Pure Botanicals",
     format: "attar",
     itemCountDescription: "20 Pure Botanicals",
     accentColor: "#C9A84C",
@@ -22,10 +22,10 @@ export const collections: CollectionMeta[] = [
   {
     slug: "traditional-series",
     name: "Traditional Series",
-    seriesNumber: "Series 02",
-    subtitle: "Timeless Compositions",
+    seriesNumber: "02",
+    subtitle: "Timeless Classics",
     format: "attar",
-    itemCountDescription: "19 Alcohol-Free Blends",
+    itemCountDescription: "19 Timeless Classics",
     accentColor: "#1B2461",
     themeStyle: "navy",
     description:
@@ -37,10 +37,10 @@ export const collections: CollectionMeta[] = [
   {
     slug: "inspired-series",
     name: "Inspired Series",
-    seriesNumber: "Series 03",
-    subtitle: "Contemporary Interpretations",
+    seriesNumber: "03",
+    subtitle: "Modern Interpretations",
     format: "attar",
-    itemCountDescription: "Original Fine Formulations",
+    itemCountDescription: "20 Modern Interpretations",
     accentColor: "#C9A84C",
     themeStyle: "noir",
     description:
@@ -54,10 +54,10 @@ export const collections: CollectionMeta[] = [
   {
     slug: "musk-series",
     name: "Musk Series",
-    seriesNumber: "Series 04",
-    subtitle: "Sensual & Intimate Skin Scents",
+    seriesNumber: "04",
+    subtitle: "Intimate Essences",
     format: "attar",
-    itemCountDescription: "13 Musk Perfume Oils",
+    itemCountDescription: "13 Intimate Essences",
     accentColor: "#C59A44",
     themeStyle: "amber",
     description:
@@ -69,10 +69,10 @@ export const collections: CollectionMeta[] = [
   {
     slug: "luxury-series",
     name: "Luxury Series",
-    seriesNumber: "Series 05",
-    subtitle: "The Master Reserve",
+    seriesNumber: "05",
+    subtitle: "Exceptional Blends",
     format: "attar",
-    itemCountDescription: "Private Reserve Distillations",
+    itemCountDescription: "14 Exceptional Blends",
     accentColor: "#C9A84C",
     themeStyle: "noir",
     description:
@@ -83,18 +83,19 @@ export const collections: CollectionMeta[] = [
   },
   {
     slug: "fruity-attars",
-    name: "Fruity Attars",
-    seriesNumber: "Series 06",
-    subtitle: "Vibrant & Expressive Perfume Oils",
+    name: "Fruity Series",
+    seriesNumber: "06",
+    subtitle: "Vibrant Expressions",
     format: "attar",
-    itemCountDescription: "6 Radiant Compositions",
+    itemCountDescription: "Products Coming Soon",
     accentColor: "#D97736",
     themeStyle: "bright",
     description:
-      "Luminous, uplifting, and effervescent. Pure fruit nectar accords blended with soft musks and white florals for a contemporary, youthful fragrance experience.",
+      "Luminous, uplifting, and effervescent. Fruity Series catalog structure is established and ready for upcoming client product releases.",
     craftNarrative:
-      "Formulated to preserve top-note vibrancy without alcohol evaporation. Zesty citrus rinds, ripe berries, and tropical lychee remain crisp and uplifting for hours.",
+      "Formulated to preserve top-note vibrancy without alcohol evaporation. Fresh fruit nectars and tropical blossoms resting on soft musk bases.",
     heroImage: botanicalImage,
+    isUpcoming: true,
   },
   {
     slug: "bakhoor",
@@ -130,6 +131,21 @@ export const collections: CollectionMeta[] = [
   },
 ];
 
+export const normalizeCollectionSlug = (slug: string): CollectionSlug => {
+  if (!slug) return "natural-series";
+  const s = slug.toLowerCase().trim();
+  if (s === "natural" || s === "natural-series" || s === "01") return "natural-series";
+  if (s === "traditional" || s === "traditional-series" || s === "02") return "traditional-series";
+  if (s === "inspired" || s === "inspired-series" || s === "03") return "inspired-series";
+  if (s === "musk" || s === "musk-series" || s === "04") return "musk-series";
+  if (s === "luxury" || s === "luxury-series" || s === "05") return "luxury-series";
+  if (s === "fruity" || s === "fruity-series" || s === "fruity-attars" || s === "06") return "fruity-attars";
+  if (s === "bakhoor") return "bakhoor";
+  if (s === "perfumes") return "perfumes";
+  return slug as CollectionSlug;
+};
+
 export const getCollectionBySlug = (slug: string): CollectionMeta | undefined => {
-  return collections.find((c) => c.slug === slug);
+  const normalized = normalizeCollectionSlug(slug);
+  return collections.find((c) => c.slug === normalized);
 };

@@ -17,7 +17,7 @@ export interface NotePyramid {
 }
 
 export interface SizeOption {
-  size: string; // e.g. "3 ml", "6 ml", "12 ml", "50 ml"
+  size: string; // e.g. "3 ML", "6 ML", "12 ML"
   price: number; // in INR
 }
 
@@ -33,6 +33,7 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
+  collection: string; // e.g. "natural", "traditional", "inspired", "musk", "luxury", "fruity"
   collectionSlug: CollectionSlug;
   collectionName: string;
   format: FragranceFormat;
@@ -44,13 +45,16 @@ export interface Product {
   sizes: SizeOption[];
   startingPrice: number;
   image: string;
-  additionalImages?: string[];
+  images?: {
+    primary: string;
+    gallery?: string[];
+  };
   badges: TrustBadgeKey[];
   featured?: boolean;
   bestseller?: boolean;
   newLaunch?: boolean;
-  isPlaceholder?: boolean; // For Bakhoor and Perfumes upcoming releases
-  inspiredBy?: string; // For Inspired Series only
+  isPlaceholder?: boolean; // For Fruity/Bakhoor/Perfumes upcoming releases
+  inspiredBy?: string; // For Inspired Series only (stored separately from name)
   distillationDetail?: string;
   longevityHours?: string;
 }

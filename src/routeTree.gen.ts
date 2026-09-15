@@ -25,6 +25,7 @@ import { Route as PoliciesReturnsRouteImport } from './routes/policies/returns'
 import { Route as PoliciesShippingRouteImport } from './routes/policies/shipping'
 import { Route as PoliciesTermsRouteImport } from './routes/policies/terms'
 import { Route as ShopIndexRouteImport } from './routes/shop/index'
+import { Route as CollectionsCollectionIndexRouteImport } from './routes/collections/$collection/index'
 import { Route as ShopCollectionIndexRouteImport } from './routes/shop/$collection/index'
 import { Route as ShopCollectionSlugRouteImport } from './routes/shop/$collection/$slug'
 
@@ -108,6 +109,12 @@ const ShopIndexRoute = ShopIndexRouteImport.update({
   path: '/shop/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CollectionsCollectionIndexRoute =
+  CollectionsCollectionIndexRouteImport.update({
+    id: '/collections/$collection/',
+    path: '/collections/$collection/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ShopCollectionIndexRoute = ShopCollectionIndexRouteImport.update({
   id: '/shop/$collection/',
   path: '/shop/$collection/',
@@ -137,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/policies/': typeof PoliciesIndexRoute
   '/shop/': typeof ShopIndexRoute
   '/shop/$collection/$slug': typeof ShopCollectionSlugRoute
+  '/collections/$collection/': typeof CollectionsCollectionIndexRoute
   '/shop/$collection/': typeof ShopCollectionIndexRoute
 }
 export interface FileRoutesByTo {
@@ -157,6 +165,7 @@ export interface FileRoutesByTo {
   '/policies': typeof PoliciesIndexRoute
   '/shop': typeof ShopIndexRoute
   '/shop/$collection/$slug': typeof ShopCollectionSlugRoute
+  '/collections/$collection': typeof CollectionsCollectionIndexRoute
   '/shop/$collection': typeof ShopCollectionIndexRoute
 }
 export interface FileRoutesById {
@@ -178,6 +187,7 @@ export interface FileRoutesById {
   '/policies/': typeof PoliciesIndexRoute
   '/shop/': typeof ShopIndexRoute
   '/shop/$collection/$slug': typeof ShopCollectionSlugRoute
+  '/collections/$collection/': typeof CollectionsCollectionIndexRoute
   '/shop/$collection/': typeof ShopCollectionIndexRoute
 }
 export interface FileRouteTypes {
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/policies/'
     | '/shop/'
     | '/shop/$collection/$slug'
+    | '/collections/$collection/'
     | '/shop/$collection/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/policies'
     | '/shop'
     | '/shop/$collection/$slug'
+    | '/collections/$collection'
     | '/shop/$collection'
   id:
     | '__root__'
@@ -240,6 +252,7 @@ export interface FileRouteTypes {
     | '/policies/'
     | '/shop/'
     | '/shop/$collection/$slug'
+    | '/collections/$collection/'
     | '/shop/$collection/'
   fileRoutesById: FileRoutesById
 }
@@ -261,6 +274,7 @@ export interface RootRouteChildren {
   PoliciesIndexRoute: typeof PoliciesIndexRoute
   ShopIndexRoute: typeof ShopIndexRoute
   ShopCollectionSlugRoute: typeof ShopCollectionSlugRoute
+  CollectionsCollectionIndexRoute: typeof CollectionsCollectionIndexRoute
   ShopCollectionIndexRoute: typeof ShopCollectionIndexRoute
 }
 
@@ -378,6 +392,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/collections/$collection/': {
+      id: '/collections/$collection/'
+      path: '/collections/$collection'
+      fullPath: '/collections/$collection/'
+      preLoaderRoute: typeof CollectionsCollectionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shop/$collection/': {
       id: '/shop/$collection/'
       path: '/shop/$collection'
@@ -413,6 +434,7 @@ const rootRouteChildren: RootRouteChildren = {
   PoliciesIndexRoute: PoliciesIndexRoute,
   ShopIndexRoute: ShopIndexRoute,
   ShopCollectionSlugRoute: ShopCollectionSlugRoute,
+  CollectionsCollectionIndexRoute: CollectionsCollectionIndexRoute,
   ShopCollectionIndexRoute: ShopCollectionIndexRoute,
 }
 export const routeTree = rootRouteImport

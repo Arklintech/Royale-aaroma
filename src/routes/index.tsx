@@ -71,7 +71,7 @@ function HomePage() {
       <FormatDiscovery />
 
       {/* =========================================================================
-          SECTION 04: DISCOVER THE EIGHT COLLECTIONS
+          SECTION 04: DISCOVER THE SIX SIGNATURE COLLECTIONS
           ========================================================================= */}
       <section className="section-space bg-background">
         <div className="site-container">
@@ -80,7 +80,7 @@ function HomePage() {
               <span className="eyebrow text-accent">Curated Fragrance Portfolios</span>
               <h2 className="title-section">Discover the Signature Collections.</h2>
               <p className="mt-3 max-w-xl text-xs sm:text-sm text-muted-foreground">
-                Each collection possesses its own distinct olfactory architecture, bottle presentation,
+                Each collection possesses its own distinct olfactory architecture, presentation,
                 and sensory intention—while remaining unmistakably Royale Aaroma.
               </p>
             </div>
@@ -93,94 +93,131 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="mt-12 flex flex-wrap justify-center gap-6 lg:gap-8">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {collections
               .filter(
                 (c) =>
-                  c.slug !== "fruity-attars" &&
                   c.slug !== "bakhoor" &&
                   c.slug !== "perfumes"
               )
               .map((c) => {
-              const isLuxury = c.themeStyle === "noir";
-              const isParchment = c.themeStyle === "parchment";
-              const isNavy = c.themeStyle === "navy";
+                const isLuxury = c.themeStyle === "noir";
+                const isNavy = c.themeStyle === "navy";
+                const collectionProducts = products.filter((p) => p.collectionSlug === c.slug);
+                const count = collectionProducts.length;
 
-              return (
-                <div
-                  key={c.slug}
-                  className={`group relative flex flex-col justify-between rounded-xl border p-7 sm:p-8 transition-all duration-300 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1.35rem)] min-h-[320px] ${
-                    isLuxury
-                      ? "bg-primary text-primary-foreground border-accent shadow-xl"
-                      : isNavy
-                        ? "bg-primary/95 text-primary-foreground border-primary"
-                        : "bg-surface border-border/80 hover:border-accent shadow-sm"
-                  }`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span
-                        className={`text-[9px] font-bold uppercase tracking-widest ${
-                          isLuxury || isNavy ? "text-accent" : "text-muted-foreground"
+                // Representative products: first 3-4 products from actual dataset
+                const representativeProducts = collectionProducts.slice(0, 4);
+
+                return (
+                  <div
+                    key={c.slug}
+                    className={`group relative flex flex-col justify-between rounded-xl border p-7 sm:p-8 transition-all duration-300 min-h-[360px] ${
+                      isLuxury
+                        ? "bg-primary text-primary-foreground border-accent shadow-xl"
+                        : isNavy
+                          ? "bg-primary/95 text-primary-foreground border-primary"
+                          : "bg-surface border-border/80 hover:border-accent shadow-sm"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={`text-[10px] font-bold uppercase tracking-widest ${
+                            isLuxury || isNavy ? "text-accent" : "text-muted-foreground"
+                          }`}
+                        >
+                          Series {c.seriesNumber || "01"}
+                        </span>
+                        <span
+                          className={`rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                            isLuxury
+                              ? "bg-accent text-accent-foreground"
+                              : isNavy
+                                ? "bg-primary-foreground/20 text-primary-foreground"
+                                : "bg-secondary text-foreground"
+                          }`}
+                        >
+                          {count > 0 ? `${count} Fragrances` : "Coming Soon"}
+                        </span>
+                      </div>
+
+                      <h3
+                        className={`mt-4 font-display text-2xl font-medium leading-snug group-hover:text-accent transition-colors ${
+                          isLuxury || isNavy ? "text-primary-foreground" : "text-foreground"
                         }`}
                       >
-                        {c.seriesNumber}
-                      </span>
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-wider ${
-                          isLuxury
-                            ? "bg-accent text-accent-foreground"
-                            : isNavy
-                              ? "bg-primary-foreground/20 text-primary-foreground"
-                              : "bg-secondary text-foreground"
+                        {c.name}
+                      </h3>
+
+                      <p
+                        className={`mt-1 text-[11px] font-semibold tracking-wider uppercase ${
+                          isLuxury || isNavy ? "text-accent" : "text-accent"
                         }`}
                       >
-                        {c.itemCountDescription}
-                      </span>
+                        {c.subtitle}
+                      </p>
+
+                      <p
+                        className={`mt-3 text-xs leading-relaxed line-clamp-2 ${
+                          isLuxury || isNavy ? "text-primary-foreground/75" : "text-muted-foreground"
+                        }`}
+                      >
+                        {c.description}
+                      </p>
+
+                      {/* Dynamic Representative Fragrances List */}
+                      <div className="mt-5 pt-3 border-t border-border/40">
+                        <span
+                          className={`text-[9px] font-bold uppercase tracking-wider ${
+                            isLuxury || isNavy ? "text-accent/90" : "text-muted-foreground"
+                          }`}
+                        >
+                          Representative Scents:
+                        </span>
+                        {count > 0 ? (
+                          <div className="mt-2 space-y-1 text-xs">
+                            {representativeProducts.map((p) => (
+                              <div key={p.id} className="flex items-center justify-between">
+                                <span className="font-medium truncate pr-2">{p.name}</span>
+                                {p.inspiredBy && (
+                                  <span className="text-[10px] italic text-accent opacity-90 shrink-0">
+                                    Inspired by {p.inspiredBy}
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                            {count > 4 && (
+                              <p className="text-[10px] font-bold text-accent pt-1">
+                                + {count - 4} more
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="mt-2 text-xs italic opacity-75">
+                            Structure ready · Awaiting client product release
+                          </p>
+                        )}
+                      </div>
                     </div>
 
-                    <h3
-                      className={`mt-4 font-display text-2xl font-medium leading-snug group-hover:text-accent transition-colors ${
-                        isLuxury || isNavy ? "text-primary-foreground" : "text-foreground"
-                      }`}
-                    >
-                      {c.name}
-                    </h3>
-
-                    <p
-                      className={`mt-1 text-[11px] font-semibold tracking-wider uppercase ${
-                        isLuxury || isNavy ? "text-accent" : "text-accent"
-                      }`}
-                    >
-                      {c.subtitle}
-                    </p>
-
-                    <p
-                      className={`mt-4 text-xs leading-relaxed line-clamp-3 ${
-                        isLuxury || isNavy ? "text-primary-foreground/75" : "text-muted-foreground"
-                      }`}
-                    >
-                      {c.description}
-                    </p>
+                    <div className="mt-6 pt-4 border-t border-border/50">
+                      <Link
+                        to="/collections/$collection"
+                        params={{ collection: c.slug.replace("-series", "").replace("-attars", "") }}
+                        className={`inline-flex items-center justify-between w-full text-xs font-bold uppercase tracking-wider transition-colors ${
+                          isLuxury || isNavy
+                            ? "text-accent group-hover:text-primary-foreground"
+                            : "text-primary group-hover:text-accent"
+                        }`}
+                      >
+                        <span>Explore {c.name.split(" ")[0]} →</span>
+                        <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </div>
                   </div>
-
-                  <div className="mt-8 pt-4 border-t border-border/50">
-                    <Link
-                      to="/shop/$collection"
-                      params={{ collection: c.slug }}
-                      className={`inline-flex items-center justify-between w-full text-xs font-bold uppercase tracking-wider transition-colors ${
-                        isLuxury || isNavy
-                          ? "text-accent group-hover:text-primary-foreground"
-                          : "text-primary group-hover:text-accent"
-                      }`}
-                    >
-                      <span>Explore Series</span>
-                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </section>

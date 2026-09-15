@@ -15,7 +15,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { getProductBySlug, getProductsByCollection } from "../../../data/products";
-import { getCollectionBySlug } from "../../../data/collections";
+import { getCollectionBySlug, normalizeCollectionSlug } from "../../../data/collections";
 import { useCommerce } from "../../../lib/commerce-context";
 import { TrustBadges } from "../../../components/TrustBadges";
 import { ProductCard } from "../../../components/ProductCard";
@@ -23,7 +23,8 @@ import { ProductCard } from "../../../components/ProductCard";
 export const Route = createFileRoute("/shop/$collection/$slug")({
   loader: async ({ params }) => {
     const product = getProductBySlug(params.slug);
-    if (!product || product.collectionSlug !== params.collection) {
+    const normalizedColl = normalizeCollectionSlug(params.collection);
+    if (!product || product.collectionSlug !== normalizedColl) {
       throw notFound();
     }
     const collection = getCollectionBySlug(params.collection);
@@ -78,7 +79,7 @@ function ProductDetailPage() {
   const isLuxury = product.collectionSlug === "luxury-series";
 
   return (
-    <div className={`min-h-screen pb-24 ${isLuxury ? "bg-[#0D1017] text-[#FBF9F4]" : "bg-background text-foreground"}`}>
+    <div className="min-h-screen pb-24 bg-background text-foreground">
       {/* Breadcrumb Navigation */}
       <div className="site-container pt-8 pb-4">
         <nav
@@ -426,7 +427,7 @@ function ProductDetailPage() {
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {relatedProducts.map((p) => (
-              <ProductCard key={p.id} product={p} theme={isLuxury ? "dark" : "light"} />
+              <ProductCard key={p.id} product={p} theme="light" />
             ))}
           </div>
         </section>

@@ -1,4 +1,5 @@
 import { CatalogDownload, PriceListRow } from "./types";
+import { products } from "./products";
 
 export const catalogDownloads: CatalogDownload[] = [
   {
@@ -44,312 +45,45 @@ export const catalogDownloads: CatalogDownload[] = [
   },
 ];
 
-export const priceListData: PriceListRow[] = [
-  // Natural Series
-  {
-    sku: "RA-NAT-001",
-    name: "Ruh Gulab (Pure Damask Rose)",
-    collection: "Natural Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹2,800 / ₹5,200 / ₹9,800",
-    notesSummary: "Fresh dew, Kannauj Damask Rose, Mysore Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-NAT-002",
-    name: "Ruh Khus (Wild Vetiver)",
-    collection: "Natural Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹2,400 / ₹4,500 / ₹8,400",
-    notesSummary: "Wild Vetiver, Green Grass, Rain-soaked Earth",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-NAT-003",
-    name: "Mitti Attar (Scent of Rain)",
-    collection: "Natural Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹2,200 / ₹4,100 / ₹7,800",
-    notesSummary: "Baked Earth, Monsoon Rain, Mysore Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-NAT-004",
-    name: "Shamama Tul Amber",
-    collection: "Natural Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹2,600 / ₹4,900 / ₹9,200",
-    notesSummary: "40+ Herbs & Spices, Saffron, Spikenard, Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-NAT-005",
-    name: "Motia Attar (Jasmine Sambac)",
-    collection: "Natural Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹2,400 / ₹4,500 / ₹8,400",
-    notesSummary: "Night Jasmine, Orange Blossom, Creamy Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-NAT-006",
-    name: "Kashmir Zafran (Pure Saffron)",
-    collection: "Natural Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹3,200 / ₹5,900 / ₹11,000",
-    notesSummary: "Pampore Saffron, Warm Thyme, Mysore Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-NAT-007",
-    name: "Pure Mysore Sandalwood",
-    collection: "Natural Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹4,200 / ₹7,900 / ₹14,800",
-    notesSummary: "Aged Santalum album heartwood, Buttery balsamic cream",
-    status: "In Stock",
-  },
+export const priceListData: PriceListRow[] = products.map((p, idx) => {
+  const prefixMap: Record<string, string> = {
+    natural: "RA-NAT",
+    traditional: "RA-TRD",
+    inspired: "RA-INS",
+    musk: "RA-MSK",
+    luxury: "RA-LUX",
+    fruity: "RA-FRT",
+    bakhoor: "RA-BKH",
+    perfumes: "RA-PRF",
+  };
+  const prefix = prefixMap[p.collection] || "RA-ATT";
+  const sku = `${prefix}-${String(idx + 1).padStart(3, "0")}`;
+  const sizesStr = p.sizes.map((s) => s.size).join(" / ");
+  const priceStr = p.isPlaceholder
+    ? "Announcing Soon"
+    : p.sizes.map((s) => `₹${s.price.toLocaleString("en-IN")}`).join(" / ");
+  const notesSummary = [
+    ...(p.notes?.top || []),
+    ...(p.notes?.heart || []),
+    ...(p.notes?.base || []),
+  ]
+    .slice(0, 3)
+    .join(", ");
 
-  // Traditional Series
-  {
-    sku: "RA-TRD-001",
-    name: "Jannat-ul-Firdaus",
-    collection: "Traditional Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹1,200 / ₹2,100 / ₹3,800",
-    notesSummary: "Garden Herbs, Blue Lotus, Spiced Amber, White Musk",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-TRD-002",
-    name: "Majmua 96 Supreme",
-    collection: "Traditional Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹1,400 / ₹2,500 / ₹4,600",
-    notesSummary: "Vetiver, Earth, Kewda, Night Jasmine, Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-TRD-003",
-    name: "Mukhallat Royale",
-    collection: "Traditional Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹1,800 / ₹3,200 / ₹5,900",
-    notesSummary: "Taif Rose, Saffron, Cambodian Oudh, Amber",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-TRD-004",
-    name: "White Oudh Classic",
-    collection: "Traditional Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹1,500 / ₹2,700 / ₹4,900",
-    notesSummary: "Cardamom, Mandarin, White Amber, Light Agarwood",
-    status: "In Stock",
-  },
-
-  // Inspired Series
-  {
-    sku: "RA-INS-001",
-    name: "Souverain (Inspired by Sauvage)",
-    collection: "Inspired Series",
-    format: "Attar Oil",
-    sizes: "6ml / 12ml",
-    priceInr: "₹899 / ₹1,599",
-    notesSummary: "Calabrian Bergamot, Sichuan Pepper, Ambroxan, Cedar",
-    inspiredBy: "Dior Sauvage",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-INS-002",
-    name: "Rouge Imperial (Inspired by BR540)",
-    collection: "Inspired Series",
-    format: "Attar Oil",
-    sizes: "6ml / 12ml",
-    priceInr: "₹999 / ₹1,799",
-    notesSummary: "Bitter Almond, Saffron, Jasmine, Ambergris, Spun Sugar",
-    inspiredBy: "MFK Baccarat Rouge 540",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-INS-003",
-    name: "Sovereign Creed (Inspired by Aventus)",
-    collection: "Inspired Series",
-    format: "Attar Oil",
-    sizes: "6ml / 12ml",
-    priceInr: "₹999 / ₹1,799",
-    notesSummary: "Pineapple, Bergamot, Smoked Birch, Oakmoss, Ambergris",
-    inspiredBy: "Creed Aventus",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-INS-004",
-    name: "Santal Sanctum (Inspired by Santal 33)",
-    collection: "Inspired Series",
-    format: "Attar Oil",
-    sizes: "6ml / 12ml",
-    priceInr: "₹949 / ₹1,699",
-    notesSummary: "Cardamom, Violet, Sandalwood, Leather, Smoke",
-    inspiredBy: "Le Labo Santal 33",
-    status: "In Stock",
-  },
-
-  // Musk Series
-  {
-    sku: "RA-MSK-001",
-    name: "Royal White Musk",
-    collection: "Musk Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹1,100 / ₹1,950 / ₹3,500",
-    notesSummary: "White Lily, Velvet Musk, Sweet Jasmine, White Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-MSK-002",
-    name: "Musk Tahara Imperial",
-    collection: "Musk Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹1,250 / ₹2,200 / ₹3,900",
-    notesSummary: "Creamy Musk, Taif Rose, Honey Accord, White Amber",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-MSK-003",
-    name: "Kashmiri Musk Supreme",
-    collection: "Musk Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹1,500 / ₹2,700 / ₹4,800",
-    notesSummary: "Dark Plum, Black Musk, Patchouli, Smoked Leather",
-    status: "In Stock",
-  },
-
-  // Luxury Series
-  {
-    sku: "RA-LUX-001",
-    name: "Royal Dehnal Oudh Vintage (Assam)",
-    collection: "Luxury Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹7,500 / ₹14,200 / ₹26,500",
-    notesSummary: "30-Year Aged Assam Aquilaria, Aged Leather, Forest Loam",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-LUX-002",
-    name: "Kalakassi Oudh Private Reserve",
-    collection: "Luxury Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹8,500 / ₹16,000 / ₹29,900",
-    notesSummary: "Apricot Smoke, Golden Agarwood, Ambergris, Rare Woods",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-LUX-003",
-    name: "Zafran Imperial Gold Reserve",
-    collection: "Luxury Series",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹6,200 / ₹11,800 / ₹21,900",
-    notesSummary: "Double-distilled Mongra Saffron in 20-Year Sandalwood",
-    status: "In Stock",
-  },
-
-  // Fruity Attars
-  {
-    sku: "RA-FRT-001",
-    name: "Zesty Orange",
-    collection: "Fruity Attars",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹850 / ₹1,450 / ₹2,600",
-    notesSummary: "Nagpur Orange, Blood Orange Zest, Neroli, White Musk",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-FRT-002",
-    name: "Crown Fruit",
-    collection: "Fruity Attars",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹850 / ₹1,450 / ₹2,600",
-    notesSummary: "Passionfruit, Pink Guava, Pineapple, Coconut Milk",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-FRT-003",
-    name: "Strawberry Nectar",
-    collection: "Fruity Attars",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹850 / ₹1,450 / ₹2,600",
-    notesSummary: "Wild Strawberries, Red Currant, Whipped Vanilla",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-FRT-004",
-    name: "Litchi Blossom",
-    collection: "Fruity Attars",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹850 / ₹1,450 / ₹2,600",
-    notesSummary: "Chilled Lychee, Pink Peony, Turkish Rose, White Cedar",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-FRT-005",
-    name: "Mango Alphonso",
-    collection: "Fruity Attars",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹850 / ₹1,450 / ₹2,600",
-    notesSummary: "Alphonso Mango, Cardamom, Coconut, Sandalwood",
-    status: "In Stock",
-  },
-  {
-    sku: "RA-FRT-006",
-    name: "Wild Berries Supreme",
-    collection: "Fruity Attars",
-    format: "Attar Oil",
-    sizes: "3ml / 6ml / 12ml",
-    priceInr: "₹850 / ₹1,450 / ₹2,600",
-    notesSummary: "Blackberry, Forest Cranberry, Cedarwood, Dark Amber",
-    status: "In Stock",
-  },
-
-  // Bakhoor & Perfumes (Upcoming)
-  {
-    sku: "RA-BKH-UPC",
-    name: "Royale Oudh Muattar Chips",
-    collection: "Bakhoor",
-    format: "Aromatic Wood",
-    sizes: "50g Jar",
-    priceInr: "Announcing Soon",
-    notesSummary: "Agarwood Chips, Taif Rose, Myrrh, Frankincense",
-    status: "Upcoming",
-  },
-  {
-    sku: "RA-PRF-UPC",
-    name: "Imperial Vetiver (Eau de Parfum)",
-    collection: "Perfumes",
-    format: "Fine Spray",
-    sizes: "50ml / 100ml",
-    priceInr: "Announcing Soon",
-    notesSummary: "Kannauj Vetiver, Bergamot, Clary Sage, Atlas Cedar",
-    status: "Upcoming",
-  },
-];
+  return {
+    sku,
+    name: p.name,
+    collection: p.collectionName,
+    format:
+      p.format === "attar"
+        ? "Attar Oil"
+        : p.format === "bakhoor"
+          ? "Aromatic Wood"
+          : "Fine Spray",
+    sizes: sizesStr,
+    priceInr: priceStr,
+    notesSummary,
+    ...(p.inspiredBy ? { inspiredBy: p.inspiredBy } : {}),
+    status: p.isPlaceholder ? "Upcoming" : "In Stock",
+  };
+});
